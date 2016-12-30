@@ -1,12 +1,12 @@
 package info.magat.mapeditor;
 
-import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class App {
@@ -16,10 +16,7 @@ public class App {
     int WIDTH = 800;
     int HEIGHT = 800;
 
-
     public void run() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-
         try {
             init();
             loop();
@@ -75,24 +72,27 @@ public class App {
 
         // Make the window visible
         glfwShowWindow(window);
-    }
 
-    private void loop() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
         // LWJGL detects the context that is current in the current thread,
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
-        int[] wWidth = new int[1];
-        int[] wHeight = new int[1];
-        glfwGetFramebufferSize(window, wWidth, wHeight);
-        Painter painter = new Painter(wWidth[0], wHeight[0]);
+    }
+
+    private void loop() {
+        Painter painter = new Painter(new Map(10));
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
-            glfwSetFramebufferSizeCallback(window, (long window, int width, int height) -> painter.resize(width, height));
+            glfwSetFramebufferSizeCallback(window, (long window, int width, int height) -> {
+                int min = Math.min(width, height);
+                int x = Math.max(0, width - min) / 2;
+                int y = Math.max(0, height - min) / 2;
+                glViewport(x, y, min, min);
+            });
 
             painter.paint();
 
