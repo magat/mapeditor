@@ -82,17 +82,11 @@ public class App {
     }
 
     private void loop() {
-        Painter painter = new Painter(new Map(10));
+        Painter painter = new Painter(new Map(10), window);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
-            glfwSetFramebufferSizeCallback(window, (long window, int width, int height) -> {
-                int min = Math.min(width, height);
-                int x = Math.max(0, width - min) / 2;
-                int y = Math.max(0, height - min) / 2;
-                glViewport(x, y, min, min);
-            });
 
             painter.paint();
 
