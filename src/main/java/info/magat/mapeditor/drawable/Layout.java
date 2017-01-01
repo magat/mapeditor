@@ -2,8 +2,12 @@ package info.magat.mapeditor.drawable;
 
 public class Layout extends Drawable {
 
-    private Map map = new Map(10);
+    private Map map;
     private Toolbar toolbar = new Toolbar();
+
+    public Layout(Map map) {
+        this.map = map;
+    }
 
     @Override
     public void draw() {

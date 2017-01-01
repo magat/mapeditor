@@ -2,10 +2,11 @@ package info.magat.mapeditor;
 
 
 import info.magat.mapeditor.drawable.Drawable;
+import info.magat.mapeditor.ui.ActionHandler;
 
 import java.util.Arrays;
 
-import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Mouse {
 
@@ -18,6 +19,13 @@ public class Mouse {
     public Mouse(long window) {
         this.window = window;
         instance = this;
+
+        glfwSetMouseButtonCallback(window, (long w, int button, int action, int mods) -> {
+                    if (button == GLFW_MOUSE_BUTTON_LEFT && action > 0) {
+                        ActionHandler.get().click();
+                    }
+                }
+        );
     }
 
     public void read() {
@@ -30,10 +38,6 @@ public class Mouse {
 
     public double getY() {
         return ypos[0];
-    }
-
-    public static Mouse getInstance() {
-        return instance;
     }
 
     public static boolean isOver(Drawable d) {

@@ -1,8 +1,10 @@
 package info.magat.mapeditor;
 
 import info.magat.mapeditor.drawable.Layout;
+import info.magat.mapeditor.drawable.Map;
 import info.magat.mapeditor.painter.OrthoPainter;
 import info.magat.mapeditor.painter.Painter;
+import info.magat.mapeditor.ui.ActionHandler;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -17,11 +19,19 @@ public class App {
     private long window;
     int WIDTH = 800;
     int HEIGHT = 800;
-    private Layout layout = new Layout();
+    private Map map = new Map(10);
+    private Layout layout = new Layout(map);
+    private Painter painter;
+    private Mouse mouse;
 
     public void run() {
         try {
-            init();
+            initWindow();
+
+            painter = new OrthoPainter(window);
+            mouse = new Mouse(window);
+            ActionHandler.init(map).originalState();
+            KeyBoard keyBoard = new KeyBoard(window);
             loop();
 
             // Free the window callbacks and destroy the window
@@ -34,7 +44,21 @@ public class App {
         }
     }
 
-    private void init() {
+    private void loop() {
+        // Run the rendering loop until the user has attempted to close
+        // the window or has pressed the ESCAPE key.
+        while (!glfwWindowShouldClose(window)) {
+            mouse.read();
+            painter.paint(layout);
+
+            glfwSwapBuffers(window);
+            // Poll for window events. The key callback above will only be
+            // invoked during this call.
+            glfwPollEvents();
+        }
+    }
+
+    private void initWindow() {
         // Setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -52,12 +76,6 @@ public class App {
         window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
         if (window == NULL)
             throw new RuntimeException("Failed to create the GLFW window");
-
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE)
-                glfwSetWindowShouldClose(window, true); // We will detect this in our rendering loop
-        });
 
         // Get the resolution of the primary monitor
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -82,24 +100,6 @@ public class App {
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
-
-    }
-
-    private void loop() {
-        Painter painter = new OrthoPainter(window);
-        Mouse mouse = new Mouse(window);
-
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while (!glfwWindowShouldClose(window)) {
-            mouse.read();
-            painter.paint(layout);
-
-            glfwSwapBuffers(window);
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
-            glfwPollEvents();
-        }
 
     }
 
