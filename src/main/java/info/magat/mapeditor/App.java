@@ -6,7 +6,6 @@ import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class App {
@@ -82,7 +81,7 @@ public class App {
     }
 
     private void loop() {
-        Painter painter = new Painter(new Map(10), window);
+        Painter painter = new OrthoPainter(window);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
