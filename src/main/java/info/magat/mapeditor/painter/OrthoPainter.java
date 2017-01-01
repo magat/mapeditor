@@ -1,6 +1,10 @@
-package info.magat.mapeditor;
+package info.magat.mapeditor.painter;
 
 
+import info.magat.mapeditor.drawable.Drawable;
+import org.lwjgl.opengl.GL11;
+
+import static info.magat.mapeditor.color.Color.BLACK;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -24,7 +28,7 @@ public class OrthoPainter extends ResizeablePainter implements Painter {
     public OrthoPainter(long window) {
         super(window);
         initPlane();
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black and opaque
+        BLACK.apply(GL11::glClearColor);
     }
 
     private void initPlane() {
@@ -43,9 +47,11 @@ public class OrthoPainter extends ResizeablePainter implements Painter {
     }
 
     @Override
-    public void paint() {
+    public void paint(Drawable drawable) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-        new EmptyCell().draw(10, 10, 200, 200);
+
+        drawable.draw(10,10,xMax-20, yMax-20);
+
         glFlush();  // Render now
     }
 

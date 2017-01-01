@@ -1,4 +1,4 @@
-package info.magat.mapeditor;
+package info.magat.mapeditor.painter;
 
 import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowSizeCallback;

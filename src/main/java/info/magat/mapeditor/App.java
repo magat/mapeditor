@@ -1,5 +1,8 @@
 package info.magat.mapeditor;
 
+import info.magat.mapeditor.drawable.Map;
+import info.magat.mapeditor.painter.OrthoPainter;
+import info.magat.mapeditor.painter.Painter;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -14,6 +17,8 @@ public class App {
     private long window;
     int WIDTH = 800;
     int HEIGHT = 800;
+    Map map = new Map(100);
+
 
     public void run() {
         try {
@@ -78,6 +83,7 @@ public class App {
         // creates the GLCapabilities instance and makes the OpenGL
         // bindings available for use.
         GL.createCapabilities();
+
     }
 
     private void loop() {
@@ -87,7 +93,7 @@ public class App {
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
 
-            painter.paint();
+            painter.paint(map);
 
             glfwSwapBuffers(window);
             // Poll for window events. The key callback above will only be
