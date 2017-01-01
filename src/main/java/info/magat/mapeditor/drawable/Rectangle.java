@@ -5,11 +5,11 @@ import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Square implements Drawable {
+public class Rectangle implements Drawable {
 
     private Color color;
 
-    public Square(Color color) {
+    public Rectangle(Color color) {
         this.color = color;
     }
 
@@ -23,5 +23,9 @@ public class Square implements Drawable {
         glVertex2f(x + width, y + height);
         glVertex2f(x, y + height);
         glEnd();
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }

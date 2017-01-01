@@ -50,7 +50,7 @@ public class OrthoPainter extends ResizeablePainter implements Painter {
     public void paint(Drawable drawable) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-        drawable.draw(10,10,xMax-20, yMax-20);
+        drawable.draw(0,0,xMax, yMax);
 
         glFlush();  // Render now
     }

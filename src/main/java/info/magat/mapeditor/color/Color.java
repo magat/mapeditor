@@ -4,13 +4,19 @@ public class Color {
 
     public static final Color RED = new Color(1.0f, 0.0f,0.0f,1.0f);
     public static final Color BLACK = new Color(0.0f, 0.0f, 0.0f, 1.0f);
+    public static final Color SLATE_GREY = new Color(112,128,144);
 
     private final float red;
     private final float green;
     private final float blue;
-
-
     private final float alpha;
+
+    private Color(int red, int green, int blue){
+        this.red = red / 255f;
+        this.green = green / 255f;
+        this.blue = blue / 255f;
+        this.alpha = 1.0f;
+    }
 
     private Color(float red, float green, float blue, float alpha) {
         this.red = red;

@@ -1,6 +1,6 @@
 package info.magat.mapeditor;
 
-import info.magat.mapeditor.drawable.Map;
+import info.magat.mapeditor.drawable.Layout;
 import info.magat.mapeditor.painter.OrthoPainter;
 import info.magat.mapeditor.painter.Painter;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -17,8 +17,7 @@ public class App {
     private long window;
     int WIDTH = 800;
     int HEIGHT = 800;
-    Map map = new Map(100);
-
+    private Layout layout = new Layout();
 
     public void run() {
         try {
@@ -93,7 +92,7 @@ public class App {
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
 
-            painter.paint(map);
+            painter.paint(layout);
 
             glfwSwapBuffers(window);
             // Poll for window events. The key callback above will only be
