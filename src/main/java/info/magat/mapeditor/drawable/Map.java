@@ -2,7 +2,7 @@ package info.magat.mapeditor.drawable;
 
 import java.util.stream.IntStream;
 
-public class Map implements Drawable {
+public class Map extends Drawable {
 
     private int side;
     private Drawable[][] grid;
@@ -17,9 +17,8 @@ public class Map implements Drawable {
         return side;
     }
 
-    // the map is always square so the height is ignored
     @Override
-    public void draw(float x, float y, float width, float height) {
+    public void draw() {
         float cellSide = width / side;
 
         for (int i = 0; i < side; i++) {

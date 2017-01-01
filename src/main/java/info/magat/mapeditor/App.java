@@ -87,11 +87,12 @@ public class App {
 
     private void loop() {
         Painter painter = new OrthoPainter(window);
+        Mouse mouse = new Mouse(window);
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
         while (!glfwWindowShouldClose(window)) {
-
+            mouse.read();
             painter.paint(layout);
 
             glfwSwapBuffers(window);

@@ -1,12 +1,12 @@
 package info.magat.mapeditor.drawable;
 
-public class Layout implements Drawable {
+public class Layout extends Drawable {
 
     private Map map = new Map(10);
     private Toolbar toolbar = new Toolbar();
 
     @Override
-    public void draw(float x, float y, float width, float height) {
+    public void draw() {
 
         // compute the map dimensions
         // the map has X rows

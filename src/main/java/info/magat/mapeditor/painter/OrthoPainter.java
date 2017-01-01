@@ -22,9 +22,6 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class OrthoPainter extends ResizeablePainter implements Painter {
 
-    private int xMax = 500;
-    private int yMax = 500;
-
     public OrthoPainter(long window) {
         super(window);
         initPlane();
@@ -32,11 +29,9 @@ public class OrthoPainter extends ResizeablePainter implements Painter {
     }
 
     private void initPlane() {
-        float aspectRatio = 1.0f * currentHeight / currentWidth;
-        yMax = Math.round(xMax * aspectRatio);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0, xMax, yMax, 0, 1, -1);
+        glOrtho(0, currentWidth, currentHeight, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW);
     }
 
@@ -50,16 +45,9 @@ public class OrthoPainter extends ResizeablePainter implements Painter {
     public void paint(Drawable drawable) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-        drawable.draw(0,0,xMax, yMax);
+        drawable.draw(0, 0, currentWidth, currentHeight);
 
         glFlush();  // Render now
     }
 
-    @Override
-    public String toString() {
-        return "OrthoPainter{" +
-                "xMax=" + xMax +
-                ", yMax=" + yMax +
-                '}';
-    }
 }

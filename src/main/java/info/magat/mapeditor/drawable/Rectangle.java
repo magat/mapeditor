@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Rectangle implements Drawable {
+public class Rectangle extends Drawable {
 
     private Color color;
 
@@ -14,7 +14,7 @@ public class Rectangle implements Drawable {
     }
 
     @Override
-    public void draw(float x, float y, float width, float height) {
+    public void draw() {
         glBegin(GL_QUADS);
         color.apply(GL11::glColor3f);
 
