@@ -29,5 +29,9 @@ public class KeyBoard {
         if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
             ActionHandler.get().back();
         }
+        // REDO on space
+        if (key == GLFW_KEY_F && action == GLFW_RELEASE) {
+            ActionHandler.get().forward();
+        }
     }
 }

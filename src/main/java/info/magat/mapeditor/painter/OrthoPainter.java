@@ -1,6 +1,5 @@
 package info.magat.mapeditor.painter;
 
-
 import info.magat.mapeditor.drawable.Drawable;
 import org.lwjgl.opengl.GL11;
 

@@ -15,7 +15,8 @@ public class ActionHandler {
     private static ActionHandler instance;
     private static ArrayList<Drawable> clickables = new ArrayList<>();
     private Color selectedColor = Color.BLACK;
-    private List<Event> events = new ArrayList<>();
+    private List<Event> past = new ArrayList<>();
+    private List<Event> future = new ArrayList<>();
     private Map map;
 
     public ActionHandler(Map map) {
@@ -47,15 +48,23 @@ public class ActionHandler {
 
     public void throwEvent(Event e) {
         if(e.apply()){
-            events.add(e);
+            past.add(e);
         }
     }
 
     public void back() {
-        if (!events.isEmpty()) {
+        if (!past.isEmpty()) {
             originalState();
-            events.remove(events.size() - 1);
-            events.forEach(Event::apply);
+            future.add(past.remove(past.size() - 1));
+            past.forEach(Event::apply);
+        }
+    }
+
+    public void forward() {
+        if (!future.isEmpty()) {
+            Event event = future.remove(future.size() - 1);
+            event.apply();
+            past.add(event);
         }
     }
 
