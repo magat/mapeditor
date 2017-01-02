@@ -1,5 +1,7 @@
 package info.magat.mapeditor.drawable;
 
+import info.magat.mapeditor.Map;
+
 public class Layout extends Drawable {
 
     private Map map;

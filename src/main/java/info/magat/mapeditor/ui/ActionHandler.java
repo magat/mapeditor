@@ -4,7 +4,7 @@ import info.magat.mapeditor.Mouse;
 import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Cell;
 import info.magat.mapeditor.drawable.Drawable;
-import info.magat.mapeditor.drawable.Map;
+import info.magat.mapeditor.Map;
 import info.magat.mapeditor.drawable.Toolbar;
 
 import java.util.ArrayList;

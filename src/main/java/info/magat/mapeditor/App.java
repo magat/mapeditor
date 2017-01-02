@@ -1,7 +1,6 @@
 package info.magat.mapeditor;
 
 import info.magat.mapeditor.drawable.Layout;
-import info.magat.mapeditor.drawable.Map;
 import info.magat.mapeditor.painter.OrthoPainter;
 import info.magat.mapeditor.painter.Painter;
 import info.magat.mapeditor.ui.ActionHandler;

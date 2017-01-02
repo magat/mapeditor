@@ -1,4 +1,7 @@
-package info.magat.mapeditor.drawable;
+package info.magat.mapeditor;
+
+import info.magat.mapeditor.drawable.Cell;
+import info.magat.mapeditor.drawable.Drawable;
 
 import java.util.function.Function;
 import java.util.stream.IntStream;
