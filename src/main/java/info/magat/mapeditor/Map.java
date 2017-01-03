@@ -1,40 +1,22 @@
 package info.magat.mapeditor;
 
-import info.magat.mapeditor.drawable.Cell;
 import info.magat.mapeditor.drawable.Drawable;
-
-import java.util.function.Function;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import info.magat.mapeditor.drawable.Grid;
 
 public class Map extends Drawable {
 
-    private int side;
-    private Cell[][] grid;
+    private Grid grid;
 
     public Map(int side) {
-        this.side = side;
-        grid = new Cell[side][side];
-        IntStream.range(0, side).forEach(i -> IntStream.range(0, side)
-                .forEach(j -> grid[i][j] = new Cell()));
+        this.grid = new Grid(side);
     }
 
-    public int getSide() {
-        return side;
-    }
-
-    public Stream<Cell> cells() {
-        return Stream.of(grid).map(Stream::of).flatMap(Function.identity());
+    public Grid getGrid() {
+        return grid;
     }
 
     @Override
     public void draw() {
-        float cellSide = width / side;
-
-        for (int i = 0; i < side; i++) {
-            for (int j = 0; j < side; j++) {
-                grid[i][j].draw(x + i * cellSide, y + j * cellSide, cellSide, cellSide);
-            }
-        }
+        grid.draw(x, y, width, height);
     }
 }

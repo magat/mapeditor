@@ -25,6 +25,12 @@ public class OrthoPainter extends ResizeablePainter implements Painter {
         super(window);
         initPlane();
         BLACK.apply(GL11::glClearColor);
+
+        glDisable(GL_DEPTH_TEST);
+
+        // Enable Blending
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     private void initPlane() {
@@ -32,6 +38,7 @@ public class OrthoPainter extends ResizeablePainter implements Painter {
         glLoadIdentity();
         glOrtho(0, currentWidth, currentHeight, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW);
+
     }
 
     @Override

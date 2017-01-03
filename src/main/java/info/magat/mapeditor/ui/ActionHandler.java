@@ -33,7 +33,7 @@ public class ActionHandler {
                     return;
                 }
 
-                throwEvent(new ColorChangeEvent(selectedColor, cell));
+                throwEvent(new ColorChangeEvent(selectedColor, map.getGrid().positionOf(cell)));
             }
         });
     }
@@ -47,7 +47,7 @@ public class ActionHandler {
     }
 
     public void throwEvent(Event e) {
-        if(e.apply()){
+        if(e.apply(map)){
             past.add(e);
         }
     }
@@ -56,14 +56,14 @@ public class ActionHandler {
         if (!past.isEmpty()) {
             originalState();
             future.add(past.remove(past.size() - 1));
-            past.forEach(Event::apply);
+            past.forEach(e -> e.apply(map));
         }
     }
 
     public void forward() {
         if (!future.isEmpty()) {
             Event event = future.remove(future.size() - 1);
-            event.apply();
+            event.apply(map);
             past.add(event);
         }
     }
@@ -76,6 +76,6 @@ public class ActionHandler {
     }
 
     public void originalState() {
-        map.cells().forEach(c -> c.setColor(Color.BLACK));
+        map.getGrid().cells().forEach(c -> c.setColor(Color.BLACK));
     }
 }

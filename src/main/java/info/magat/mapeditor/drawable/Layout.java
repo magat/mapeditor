@@ -13,15 +13,15 @@ public class Layout extends Drawable {
 
     @Override
     public void draw() {
-
+        Grid grid = map.getGrid();
         // compute the map dimensions
         // the map has X rows
         // and the toolbar is one row
-        float mapWidth = Math.min(map.getSide() * height / (map.getSide() + 1), width);
+        float mapWidth = Math.min(grid.getSide() * height / (grid.getSide() + 1), width);
 
         float separator = (width - mapWidth) / 2;
 
-        map.draw(separator, y, mapWidth, mapWidth);
-        toolbar.draw(separator, y + mapWidth, mapWidth, mapWidth / map.getSide());
+        grid.draw(separator, y, mapWidth, mapWidth);
+        toolbar.draw(separator, y + mapWidth, mapWidth, mapWidth / grid.getSide());
     }
 }
