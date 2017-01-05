@@ -1,19 +1,22 @@
 package info.magat.mapeditor.drawable;
 
-import info.magat.mapeditor.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Layout extends Drawable {
 
-    private Map map;
+    private Grid grid;
     private Toolbar toolbar = new Toolbar();
 
-    public Layout(Map map) {
-        this.map = map;
+    @Autowired
+    public Layout(@Qualifier("map") Grid grid) {
+        this.grid = grid;
     }
 
     @Override
     public void draw() {
-        Grid grid = map.getGrid();
         // compute the map dimensions
         // the map has X rows
         // and the toolbar is one row

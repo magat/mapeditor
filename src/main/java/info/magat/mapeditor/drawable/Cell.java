@@ -1,7 +1,7 @@
 package info.magat.mapeditor.drawable;
 
 import info.magat.mapeditor.color.Color;
-import info.magat.mapeditor.ui.ActionHandler;
+import info.magat.mapeditor.event.ActionHandler;
 
 import java.util.Objects;
 import java.util.UUID;

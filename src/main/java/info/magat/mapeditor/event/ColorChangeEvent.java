@@ -1,8 +1,8 @@
-package info.magat.mapeditor.ui;
+package info.magat.mapeditor.event;
 
-import info.magat.mapeditor.Map;
 import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Cell;
+import info.magat.mapeditor.drawable.Grid;
 import info.magat.mapeditor.drawable.Position;
 
 import java.util.Objects;
@@ -18,8 +18,8 @@ public class ColorChangeEvent implements Event {
     }
 
     @Override
-    public boolean apply(Map map) {
-        Cell cell = map.getGrid().get(position);
+    public boolean apply(Grid grid) {
+        Cell cell = grid.get(position);
         if(cell.getColor().equals(color)){
             return false;
         }

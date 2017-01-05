@@ -2,8 +2,8 @@ package info.magat.mapeditor.store;
 
 import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Position;
-import info.magat.mapeditor.ui.ColorChangeEvent;
-import info.magat.mapeditor.ui.Event;
+import info.magat.mapeditor.event.ColorChangeEvent;
+import info.magat.mapeditor.event.Event;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package info.magat.mapeditor.ui;
+package info.magat.mapeditor.event;
 
 import java.util.ArrayList;
 import java.util.List;

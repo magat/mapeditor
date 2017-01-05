@@ -2,18 +2,20 @@ package info.magat.mapeditor.store;
 
 import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Position;
-import info.magat.mapeditor.ui.ColorChangeEvent;
-import info.magat.mapeditor.ui.Event;
+import info.magat.mapeditor.event.ColorChangeEvent;
+import info.magat.mapeditor.event.Event;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Component
 public class Store {
 
-    public static final String CURRENT_EVENT = "CURRENT";
-    public static final String COLOR_CHANGE = "COLOR_CHANGE";
-    public static final String EVENT_DATA_SEPARATOR = ":";
-    public static final String POSITION_DATA_SEPARATOR = ",";
+    private static final String CURRENT_EVENT = "CURRENT";
+    private static final String COLOR_CHANGE = "COLOR_CHANGE";
+    private static final String EVENT_DATA_SEPARATOR = ":";
+    private static final String POSITION_DATA_SEPARATOR = ",";
 
     public String writeHeader(int currentEventPosition) {
         return CURRENT_EVENT + EVENT_DATA_SEPARATOR + currentEventPosition;

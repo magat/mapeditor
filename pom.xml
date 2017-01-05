@@ -43,12 +43,14 @@
         </profile>
     </profiles>
     <dependencies>
+
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20160810</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>1.4.3.RELEASE</version>
         </dependency>
 
+        <!-- LWJGL -->
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>
@@ -186,10 +188,13 @@
             <classifier>${lwjgl.natives}</classifier>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- TESTS -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

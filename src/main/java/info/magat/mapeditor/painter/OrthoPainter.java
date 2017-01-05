@@ -1,7 +1,10 @@
 package info.magat.mapeditor.painter;
 
 import info.magat.mapeditor.drawable.Drawable;
+import info.magat.mapeditor.window.Window;
 import org.lwjgl.opengl.GL11;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import static info.magat.mapeditor.color.Color.BLACK;
 import static org.lwjgl.opengl.GL11.*;
@@ -19,10 +22,12 @@ import static org.lwjgl.opengl.GL11.*;
  *   v
  * (0, yMax)                           (xMax,yMax)
  */
+@Component
 public class OrthoPainter extends ResizeablePainter implements Painter {
 
-    public OrthoPainter(long window) {
-        super(window);
+    @Autowired
+    public OrthoPainter(Window window) {
+        super(window.getId());
         initPlane();
         BLACK.apply(GL11::glClearColor);
 
