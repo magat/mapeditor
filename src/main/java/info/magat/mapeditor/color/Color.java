@@ -12,20 +12,17 @@ public class Color {
     public final int red;
     public final int green;
     public final int blue;
-    private final int alpha;
 
     public Color(int red, int green, int blue) {
         this.red = red;
         this.green = green;
         this.blue = blue;
-        this.alpha = 0;
     }
 
-    public Color(float red, float green, float blue, float alpha) {
+    public Color(float red, float green, float blue) {
         this.red = Math.round(red * 255f);
         this.green = Math.round(green * 255f);
         this.blue = Math.round(blue * 255f);
-        this.alpha = Math.round(alpha * 255f);
     }
 
     public void apply(ColoredMethod method) {
@@ -33,11 +30,11 @@ public class Color {
     }
 
     public void apply(ColoredAlphaMethod method) {
-        method.apply(this.red / 255f, this.green / 255f, this.blue / 255f, this.alpha / 255f);
+        method.apply(this.red / 255f, this.green / 255f, this.blue / 255f, 1.0f);
     }
 
     public static Color random() {
-        return new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), (float) Math.random());
+        return new Color((float) Math.random(), (float) Math.random(), (float) Math.random());
     }
 
     @Override
@@ -51,13 +48,12 @@ public class Color {
         Color color = (Color) o;
         return Float.compare(color.red, red) == 0 &&
                 Float.compare(color.green, green) == 0 &&
-                Float.compare(color.blue, blue) == 0 &&
-                Float.compare(color.alpha, alpha) == 0;
+                Float.compare(color.blue, blue) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(red, green, blue, alpha);
+        return Objects.hash(red, green, blue);
     }
 
 }
