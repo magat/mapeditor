@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
-import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 @Component
 public class ActionHandler {
@@ -39,29 +39,40 @@ public class ActionHandler {
 
         glfwSetMouseButtonCallback(window.getId(), (long w, int button, int action, int mods) -> {
                     if (button == GLFW_MOUSE_BUTTON_LEFT && action > 0) {
-                        this.click();
+                        click();
                     }
                 }
         );
     }
 
-    public void click() {
-        clickables.stream().filter(cursor::isOver).forEach(d -> {
+    private void click() {
+        Optional<ColorChangeEvent> action = clickables.stream().filter(this.cursor::isOver).map(d -> {
             if (d instanceof Cell) {
                 Cell cell = (Cell) d;
 
                 if (d instanceof Toolbar.ToolBarCell) {
                     selectedColor = cell.getColor();
-                    return;
+                } else {
+                    return new ColorChangeEvent(selectedColor, this.grid.positionOf(cell));
                 }
-
-                throwEvent(new ColorChangeEvent(selectedColor, grid.positionOf(cell)));
             }
-        });
+            return null;
+        }).filter(Objects::nonNull).findFirst();
+        action.ifPresent(this::throwEvent);
     }
 
-    public static void registerClickAble(Drawable drawable) {
+    public static void registerClickable(Drawable drawable) {
         clickables.add(drawable);
+    }
+
+    private void split() {
+        Optional<SplitEvent> action = clickables.stream().filter(this.cursor::isOver).map(d -> {
+            if (!Cell.class.isAssignableFrom(d.getClass()) || Toolbar.ToolBarCell.class.isAssignableFrom(d.getClass())) {
+                return null;
+            }
+            return new SplitEvent(this.grid.positionOf(d));
+        }).filter(Objects::nonNull).findFirst();
+        action.ifPresent(this::throwEvent);
     }
 
     public void throwEvent(Event e) {
@@ -72,7 +83,7 @@ public class ActionHandler {
 
     public void back() {
         // go back to the beginning
-        originalState();
+        throwEvent(new ResetEvent());
         // and apply all events except for the last one
         history.previous();
         history.past().forEach(this::apply);
@@ -80,10 +91,6 @@ public class ActionHandler {
 
     public void forward() {
         history.next().ifPresent(this::apply);
-    }
-
-    public void originalState() {
-        grid.cells().forEach(c -> c.setColor(Color.BLACK));
     }
 
     public void save() {
@@ -98,7 +105,7 @@ public class ActionHandler {
         try {
             history = fileStore.readHistory();
 
-            originalState();
+            throwEvent(new ResetEvent());
 
             history.past().forEach(this::apply);
 
@@ -113,20 +120,30 @@ public class ActionHandler {
 
     private void handle(long window, int key, int scancode, int action, int mods) {
         // Quit on escape key
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
-            glfwSetWindowShouldClose(window, true);
+        if (action == GLFW_RELEASE) {
+            if (key == GLFW_KEY_ESCAPE) {
+                glfwSetWindowShouldClose(window, true);
+            }
+            // UNDO on space
+            if (key == GLFW_KEY_SPACE) {
+                back();
+            }
+            // REDO on F
+            if (key == GLFW_KEY_F) {
+                forward();
+            }
+            // SAVE on S
+            if (key == GLFW_KEY_S) {
+                save();
+            }
+            // SPLIT on X
+            if (key == GLFW_KEY_X) {
+                split();
+            }
         }
-        // UNDO on space
-        if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
-            back();
-        }
-        // REDO on F
-        if (key == GLFW_KEY_F && action == GLFW_RELEASE) {
-            forward();
-        }
-        // SAVE on S
-        if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
-            save();
-        }
+    }
+
+    public static void unregisterClickable(Cell cell) {
+        clickables.remove(cell);
     }
 }

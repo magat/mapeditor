@@ -1,17 +1,15 @@
 package info.magat.mapeditor.drawable;
 
-import java.util.function.Function;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Grid extends Drawable {
 
     private int side;
-    private Cell[][] grid;
+    private Drawable[][] grid;
 
     public Grid(int side) {
         this.side = side;
-        grid = new Cell[side][side];
+        grid = new Drawable[side][side];
         IntStream.range(0, side).forEach(i -> IntStream.range(0, side)
                 .forEach(j -> grid[i][j] = new Cell()));
     }
@@ -20,15 +18,15 @@ public class Grid extends Drawable {
         return side;
     }
 
-    public Stream<Cell> cells() {
-        return Stream.of(grid).map(Stream::of).flatMap(Function.identity());
-    }
-
-    public Cell get(Position pos) {
+    public Drawable get(Position pos) {
         return grid[pos.x][pos.y];
     }
 
-    public Position positionOf(Cell cell){
+    public void set(Drawable drawable, Position pos){
+        grid[pos.x][pos.y] = drawable;
+    }
+
+    public Position positionOf(Drawable cell){
         for (int i = 0; i < side; i++) {
             for (int j = 0; j < side; j++) {
                 if (grid[i][j].equals(cell)) {

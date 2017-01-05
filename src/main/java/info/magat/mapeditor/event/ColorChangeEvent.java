@@ -19,11 +19,7 @@ public class ColorChangeEvent implements Event {
 
     @Override
     public boolean apply(Grid grid) {
-        Cell cell = grid.get(position);
-        if(cell.getColor().equals(color)){
-            return false;
-        }
-        cell.setColor(this.color);
+        grid.set(new Cell(color), position);
         return true;
     }
 

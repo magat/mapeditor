@@ -12,7 +12,12 @@ public class Cell extends Drawable {
     private UUID id = UUID.randomUUID();
 
     public Cell() {
-        ActionHandler.registerClickAble(this);
+        ActionHandler.registerClickable(this);
+    }
+
+    public Cell(Color color) {
+        this();
+        this.color = color;
     }
 
     @Override
@@ -43,5 +48,9 @@ public class Cell extends Drawable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void destroy(){
+        ActionHandler.unregisterClickable(this);
     }
 }
