@@ -5,7 +5,7 @@ import info.magat.mapeditor.drawable.Cell;
 import info.magat.mapeditor.drawable.Drawable;
 import info.magat.mapeditor.drawable.Grid;
 import info.magat.mapeditor.drawable.Toolbar;
-import info.magat.mapeditor.input.Mouse;
+import info.magat.mapeditor.input.Cursor;
 import info.magat.mapeditor.store.FileStore;
 import info.magat.mapeditor.window.Window;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,13 @@ public class ActionHandler {
     private Grid grid;
     private History history = new History();
     private FileStore fileStore;
-    private Mouse mouse;
+    private Cursor cursor;
 
     @Autowired
-    public ActionHandler(@Qualifier("map") Grid grid, FileStore fileStore, Window window, Mouse mouse) {
+    public ActionHandler(@Qualifier("map") Grid grid, FileStore fileStore, Window window, Cursor cursor) {
         this.grid = grid;
         this.fileStore = fileStore;
-        this.mouse = mouse;
+        this.cursor = cursor;
         loadFromFile();
         glfwSetKeyCallback(window.getId(), this::handle);
 
@@ -46,7 +46,7 @@ public class ActionHandler {
     }
 
     public void click() {
-        clickables.stream().filter(mouse::isOver).forEach(d -> {
+        clickables.stream().filter(cursor::isOver).forEach(d -> {
             if (d instanceof Cell) {
                 Cell cell = (Cell) d;
 
@@ -65,25 +65,21 @@ public class ActionHandler {
     }
 
     public void throwEvent(Event e) {
-        if (e.apply(grid)) {
-            history.past.add(e);
+        if (apply(e)) {
+            history.add(e);
         }
     }
 
     public void back() {
-        if (!history.past.isEmpty()) {
-            originalState();
-            history.future.add(history.past.remove(history.past.size() - 1));
-            history.past.forEach(e -> e.apply(grid));
-        }
+        // go back to the beginning
+        originalState();
+        // and apply all events except for the last one
+        history.previous();
+        history.past().forEach(this::apply);
     }
 
     public void forward() {
-        if (!history.future.isEmpty()) {
-            Event event = history.future.remove(history.future.size() - 1);
-            event.apply(grid);
-            history.past.add(event);
-        }
+        history.next().ifPresent(this::apply);
     }
 
     public void originalState() {
@@ -103,11 +99,16 @@ public class ActionHandler {
             history = fileStore.readHistory();
 
             originalState();
-            history.past.forEach(e -> e.apply(grid));
+
+            history.past().forEach(this::apply);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean apply(Event e) {
+        return e.apply(grid);
     }
 
     private void handle(long window, int key, int scancode, int action, int mods) {

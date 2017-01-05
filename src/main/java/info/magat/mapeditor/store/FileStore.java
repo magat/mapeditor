@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -28,9 +29,9 @@ public class FileStore {
     public void storeHistory(History history) throws IOException {
         System.out.println("Saving to file " + path.toString());
 
-        Files.write(path, Arrays.asList(store.writeHeader(history.past.size())), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
-        Files.write(path, asStrings(history.past), StandardOpenOption.WRITE, StandardOpenOption.APPEND);
-        Files.write(path, asStrings(history.future), StandardOpenOption.WRITE, StandardOpenOption.APPEND);
+        Files.write(path, Arrays.asList(store.writeHeader(history.pastSize() )), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+        Files.write(path, asStrings(history.past()), StandardOpenOption.WRITE, StandardOpenOption.APPEND);
+        Files.write(path, asStrings(history.future()), StandardOpenOption.WRITE, StandardOpenOption.APPEND);
     }
 
     public History readHistory() throws IOException {
@@ -39,14 +40,12 @@ public class FileStore {
         int currentEvent = store.readCurrentEvent(lines.remove(0));
         List<Event> events = lines.stream().map(store::readEvent).collect(toList());
 
-        History history = new History();
-        history.past.addAll(events.subList(0, currentEvent));
-        history.future.addAll(events.subList(currentEvent, events.size()));
+        History history = new History(events.subList(0, currentEvent), events.subList(currentEvent, events.size()));
 
         return history;
     }
 
-    private List<String> asStrings(List<Event> past) {
-        return past.stream().map(store::writeEvent).collect(toList());
+    private List<String> asStrings(Stream<Event> past) {
+        return past.map(store::writeEvent).collect(toList());
     }
 }

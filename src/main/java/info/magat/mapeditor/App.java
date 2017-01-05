@@ -2,7 +2,6 @@ package info.magat.mapeditor;
 
 import info.magat.mapeditor.drawable.Grid;
 import info.magat.mapeditor.drawable.Layout;
-import info.magat.mapeditor.input.Mouse;
 import info.magat.mapeditor.painter.Painter;
 import info.magat.mapeditor.window.Window;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,6 @@ public class App implements CommandLineRunner {
     @Autowired
     private Painter painter;
     @Autowired
-    private Mouse mouse;
-    @Autowired
     private Layout layout;
 
     @Bean
@@ -36,7 +33,6 @@ public class App implements CommandLineRunner {
             // Run the rendering loop until the user has attempted to close
             // the window or has pressed the ESCAPE key.
             while (!glfwWindowShouldClose(window.getId())) {
-                mouse.read();
                 painter.paint(layout);
                 window.refresh();
                 // Poll for window events. All callbacks will only be invoked during this call.
