@@ -1,23 +1,24 @@
 package info.magat.mapeditor.ui;
 
+import info.magat.mapeditor.Map;
 import info.magat.mapeditor.Mouse;
 import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Cell;
 import info.magat.mapeditor.drawable.Drawable;
-import info.magat.mapeditor.Map;
 import info.magat.mapeditor.drawable.Toolbar;
+import info.magat.mapeditor.store.FileStore;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ActionHandler {
 
     private static ActionHandler instance;
     private static ArrayList<Drawable> clickables = new ArrayList<>();
     private Color selectedColor = Color.BLACK;
-    private List<Event> past = new ArrayList<>();
-    private List<Event> future = new ArrayList<>();
     private Map map;
+    private History history = new History();
+    private FileStore fileStore = new FileStore();
 
     public ActionHandler(Map map) {
         this.map = map;
@@ -48,23 +49,23 @@ public class ActionHandler {
 
     public void throwEvent(Event e) {
         if(e.apply(map)){
-            past.add(e);
+            history.past.add(e);
         }
     }
 
     public void back() {
-        if (!past.isEmpty()) {
+        if (!history.past.isEmpty()) {
             originalState();
-            future.add(past.remove(past.size() - 1));
-            past.forEach(e -> e.apply(map));
+            history.future.add(history.past.remove(history.past.size() - 1));
+            history.past.forEach(e -> e.apply(map));
         }
     }
 
     public void forward() {
-        if (!future.isEmpty()) {
-            Event event = future.remove(future.size() - 1);
+        if (!history.future.isEmpty()) {
+            Event event = history.future.remove(history.future.size() - 1);
             event.apply(map);
-            past.add(event);
+            history.past.add(event);
         }
     }
 
@@ -77,5 +78,25 @@ public class ActionHandler {
 
     public void originalState() {
         map.getGrid().cells().forEach(c -> c.setColor(Color.BLACK));
+    }
+
+    public void save(){
+        try {
+            fileStore.storeHistory(history);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadFromFile(){
+        try {
+            history = fileStore.readHistory();
+
+            originalState();
+            history.past.forEach(e -> e.apply(map));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

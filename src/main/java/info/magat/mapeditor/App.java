@@ -29,7 +29,7 @@ public class App {
 
             painter = new OrthoPainter(window);
             mouse = new Mouse(window);
-            ActionHandler.init(map).originalState();
+            ActionHandler.init(map).loadFromFile();
             KeyBoard keyBoard = new KeyBoard(window);
             loop();
 

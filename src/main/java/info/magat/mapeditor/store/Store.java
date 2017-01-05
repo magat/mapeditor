@@ -10,9 +10,18 @@ import java.util.stream.Stream;
 
 public class Store {
 
+    public static final String CURRENT_EVENT = "CURRENT";
     public static final String COLOR_CHANGE = "COLOR_CHANGE";
     public static final String EVENT_DATA_SEPARATOR = ":";
     public static final String POSITION_DATA_SEPARATOR = ",";
+
+    public String writeHeader(int currentEventPosition) {
+        return CURRENT_EVENT + EVENT_DATA_SEPARATOR + currentEventPosition;
+    }
+
+    public int readCurrentEvent(String header) {
+        return Integer.parseInt(header.substring(CURRENT_EVENT.length() + EVENT_DATA_SEPARATOR.length()));
+    }
 
     public String writeEvent(Event event) {
         if (ColorChangeEvent.class.isAssignableFrom(event.getClass())) {
