@@ -1,8 +1,10 @@
-package info.magat.mapeditor.event;
+package info.magat.mapeditor;
 
 import info.magat.mapeditor.drawable.*;
+import info.magat.mapeditor.event.*;
+import info.magat.mapeditor.history.History;
 import info.magat.mapeditor.input.Cursor;
-import info.magat.mapeditor.store.FileStore;
+import info.magat.mapeditor.history.store.FileStore;
 import info.magat.mapeditor.window.Window;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -137,6 +139,6 @@ public class ActionHandler {
     private void split() {
         findTarget().map(c -> this.state.getCurrentGrid().positionOf(c))
                 .filter(Objects::nonNull)
-                .ifPresent(pos -> throwEvent(new SplitEvent(pos)));
+                .ifPresent(pos -> throwEvent(new SplitCellEvent(pos)));
     }
 }

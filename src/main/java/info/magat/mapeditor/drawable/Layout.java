@@ -1,6 +1,6 @@
 package info.magat.mapeditor.drawable;
 
-import info.magat.mapeditor.event.State;
+import info.magat.mapeditor.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,5 +1,6 @@
 package info.magat.mapeditor.event;
 
+import info.magat.mapeditor.State;
 import info.magat.mapeditor.color.Color;
 
 public class SelectColorEvent implements Event {

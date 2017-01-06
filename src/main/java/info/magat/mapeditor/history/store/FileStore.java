@@ -1,7 +1,7 @@
-package info.magat.mapeditor.store;
+package info.magat.mapeditor.history.store;
 
 import info.magat.mapeditor.event.Event;
-import info.magat.mapeditor.event.History;
+import info.magat.mapeditor.history.History;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

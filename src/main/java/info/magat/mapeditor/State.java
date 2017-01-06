@@ -1,4 +1,4 @@
-package info.magat.mapeditor.event;
+package info.magat.mapeditor;
 
 import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Grid;

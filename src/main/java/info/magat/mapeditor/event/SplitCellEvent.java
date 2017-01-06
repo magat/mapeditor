@@ -1,12 +1,13 @@
 package info.magat.mapeditor.event;
 
+import info.magat.mapeditor.State;
 import info.magat.mapeditor.drawable.*;
 
-public class SplitEvent implements Event {
+public class SplitCellEvent implements Event {
 
     public final Position position;
 
-    public SplitEvent(Position position) {
+    public SplitCellEvent(Position position) {
         this.position = position;
     }
 

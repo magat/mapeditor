@@ -1,4 +1,6 @@
-package info.magat.mapeditor.event;
+package info.magat.mapeditor.history;
+
+import info.magat.mapeditor.event.Event;
 
 import java.util.ArrayList;
 import java.util.List;
