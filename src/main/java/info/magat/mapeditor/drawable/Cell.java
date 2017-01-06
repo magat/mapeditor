@@ -1,22 +1,20 @@
 package info.magat.mapeditor.drawable;
 
 import info.magat.mapeditor.color.Color;
-import info.magat.mapeditor.event.ActionHandler;
 
 import java.util.Objects;
 import java.util.UUID;
 
 public class Cell extends Drawable {
 
-    private Color color = Color.BLACK;
+    private Color color;
     private UUID id = UUID.randomUUID();
 
     public Cell() {
-        ActionHandler.registerClickable(this);
+        this(Color.BLACK);
     }
 
     public Cell(Color color) {
-        this();
         this.color = color;
     }
 
@@ -50,7 +48,4 @@ public class Cell extends Drawable {
         return Objects.hash(id);
     }
 
-    public void destroy(){
-        ActionHandler.unregisterClickable(this);
-    }
 }

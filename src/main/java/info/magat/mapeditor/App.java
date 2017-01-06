@@ -1,5 +1,6 @@
 package info.magat.mapeditor;
 
+import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Grid;
 import info.magat.mapeditor.drawable.Layout;
 import info.magat.mapeditor.painter.Painter;
@@ -24,7 +25,7 @@ public class App implements CommandLineRunner {
 
     @Bean
     public Grid map(){
-        return new Grid(10);
+        return new Grid(10, Color.BLACK);
     }
 
     @Override

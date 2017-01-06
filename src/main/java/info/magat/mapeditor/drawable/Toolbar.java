@@ -4,13 +4,14 @@ import info.magat.mapeditor.color.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static info.magat.mapeditor.color.Color.SLATE_GREY;
 
 public class Toolbar extends Drawable {
 
     int SIZE = 12;
-    private List<Cell> cells;
+    private List<Drawable> cells;
 
     public Toolbar() {
         cells = new ArrayList<>();
@@ -31,6 +32,11 @@ public class Toolbar extends Drawable {
         for (int i = 0; i < SIZE; i++) {
             cells.get(i).draw(x + i * cellHeight, y + height - cellHeight, cellHeight, cellHeight);
         }
+    }
+
+    @Override
+    public Stream<Drawable> elements() {
+        return cells.stream();
     }
 
     public class ToolBarCell extends Cell{

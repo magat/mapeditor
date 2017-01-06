@@ -6,8 +6,11 @@ import info.magat.mapeditor.drawable.Grid;
 import info.magat.mapeditor.drawable.Position;
 
 public class ResetEvent implements Event {
+
     @Override
-    public boolean apply(Grid grid) {
+    public boolean apply(State state){
+        Grid grid = state.getRoot();
+        state.setCurrentGrid(grid);
         for (int i = 0; i < grid.getSide(); i++) {
             for (int j = 0; j < grid.getSide(); j++) {
                 grid.set(new Cell(Color.BLACK), new Position(i, j));

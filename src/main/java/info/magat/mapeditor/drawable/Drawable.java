@@ -1,6 +1,8 @@
 package info.magat.mapeditor.drawable;
 
 
+import java.util.stream.Stream;
+
 public abstract class Drawable {
 
     protected float x;
@@ -48,5 +50,9 @@ public abstract class Drawable {
 
     public void setHeight(float height) {
         this.height = height;
+    }
+
+    public Stream<Drawable> elements(){
+        return Stream.of(this);
     }
 }

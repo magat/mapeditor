@@ -2,7 +2,6 @@ package info.magat.mapeditor.event;
 
 import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Cell;
-import info.magat.mapeditor.drawable.Grid;
 import info.magat.mapeditor.drawable.Position;
 
 import java.util.Objects;
@@ -18,8 +17,8 @@ public class ColorChangeEvent implements Event {
     }
 
     @Override
-    public boolean apply(Grid grid) {
-        grid.set(new Cell(color), position);
+    public boolean apply(State state) {
+        state.getCurrentGrid().set(new Cell(color), position);
         return true;
     }
 

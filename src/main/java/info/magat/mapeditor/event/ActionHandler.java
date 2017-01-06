@@ -1,19 +1,13 @@
 package info.magat.mapeditor.event;
 
-import info.magat.mapeditor.color.Color;
-import info.magat.mapeditor.drawable.Cell;
-import info.magat.mapeditor.drawable.Drawable;
-import info.magat.mapeditor.drawable.Grid;
-import info.magat.mapeditor.drawable.Toolbar;
+import info.magat.mapeditor.drawable.*;
 import info.magat.mapeditor.input.Cursor;
 import info.magat.mapeditor.store.FileStore;
 import info.magat.mapeditor.window.Window;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,18 +16,18 @@ import static org.lwjgl.glfw.GLFW.*;
 @Component
 public class ActionHandler {
 
-    private static ArrayList<Drawable> clickables = new ArrayList<>();
-    private Color selectedColor = Color.BLACK;
-    private Grid grid;
     private History history = new History();
     private FileStore fileStore;
     private Cursor cursor;
+    private Layout layout;
+    private State state;
 
     @Autowired
-    public ActionHandler(@Qualifier("map") Grid grid, FileStore fileStore, Window window, Cursor cursor) {
-        this.grid = grid;
+    public ActionHandler(FileStore fileStore, Window window, Cursor cursor, Layout layout, State state) {
         this.fileStore = fileStore;
         this.cursor = cursor;
+        this.layout = layout;
+        this.state = state;
         loadFromFile();
         glfwSetKeyCallback(window.getId(), this::handle);
 
@@ -46,37 +40,25 @@ public class ActionHandler {
     }
 
     private void click() {
-        Optional<ColorChangeEvent> action = clickables.stream().filter(this.cursor::isOver).map(d -> {
+        findTarget().ifPresent(d -> {
             if (d instanceof Cell) {
                 Cell cell = (Cell) d;
 
                 if (d instanceof Toolbar.ToolBarCell) {
-                    selectedColor = cell.getColor();
+                    throwEvent(new SelectColorEvent(cell.getColor()));
                 } else {
-                    return new ColorChangeEvent(selectedColor, this.grid.positionOf(cell));
+                    throwEvent(new ColorChangeEvent(state.getSelectedColor(), this.state.getCurrentGrid().positionOf(cell)));
                 }
             }
-            return null;
-        }).filter(Objects::nonNull).findFirst();
-        action.ifPresent(this::throwEvent);
+        });
     }
 
-    public static void registerClickable(Drawable drawable) {
-        clickables.add(drawable);
-    }
-
-    private void split() {
-        Optional<SplitEvent> action = clickables.stream().filter(this.cursor::isOver).map(d -> {
-            if (!Cell.class.isAssignableFrom(d.getClass()) || Toolbar.ToolBarCell.class.isAssignableFrom(d.getClass())) {
-                return null;
-            }
-            return new SplitEvent(this.grid.positionOf(d));
-        }).filter(Objects::nonNull).findFirst();
-        action.ifPresent(this::throwEvent);
+    private Optional<Drawable> findTarget() {
+        return layout.elements().filter(cursor::isOver).findFirst();
     }
 
     public void throwEvent(Event e) {
-        if (apply(e)) {
+        if (e.apply(state)) {
             history.add(e);
         }
     }
@@ -86,11 +68,11 @@ public class ActionHandler {
         throwEvent(new ResetEvent());
         // and apply all events except for the last one
         history.previous();
-        history.past().forEach(this::apply);
+        history.past().forEach((e) -> e.apply(state));
     }
 
     public void forward() {
-        history.next().ifPresent(this::apply);
+        history.next().ifPresent((e) -> e.apply(state));
     }
 
     public void save() {
@@ -103,19 +85,14 @@ public class ActionHandler {
 
     public void loadFromFile() {
         try {
-            history = fileStore.readHistory();
-
             throwEvent(new ResetEvent());
 
-            history.past().forEach(this::apply);
+            history = fileStore.readHistory();
+            history.past().forEach((e) -> e.apply(state));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private boolean apply(Event e) {
-        return e.apply(grid);
     }
 
     private void handle(long window, int key, int scancode, int action, int mods) {
@@ -124,26 +101,36 @@ public class ActionHandler {
             if (key == GLFW_KEY_ESCAPE) {
                 glfwSetWindowShouldClose(window, true);
             }
-            // UNDO on space
-            if (key == GLFW_KEY_SPACE) {
+            // UNDO on Z
+            if (key == GLFW_KEY_Z) {
                 back();
             }
-            // REDO on F
-            if (key == GLFW_KEY_F) {
+            // REDO on X
+            if (key == GLFW_KEY_X) {
                 forward();
             }
             // SAVE on S
             if (key == GLFW_KEY_S) {
                 save();
             }
-            // SPLIT on X
-            if (key == GLFW_KEY_X) {
+            // SPLIT on C
+            if (key == GLFW_KEY_C) {
                 split();
+            }
+            // BACK TO ROOT on SPACE
+            if(key == GLFW_KEY_SPACE){
+                resetView();
             }
         }
     }
 
-    public static void unregisterClickable(Cell cell) {
-        clickables.remove(cell);
+    private void resetView() {
+        throwEvent(new ResetViewEvent());
+    }
+
+    private void split() {
+        findTarget().map(c -> this.state.getCurrentGrid().positionOf(c))
+                .filter(Objects::nonNull)
+                .ifPresent(pos -> throwEvent(new SplitEvent(pos)));
     }
 }

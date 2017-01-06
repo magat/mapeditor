@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class History {
 
     private final List<Event> past;
-    private final List<Event> future;
+    private List<Event> future;
 
     public History() {
         past = new ArrayList<>();
@@ -38,6 +38,7 @@ public class History {
 
     public void add(Event e){
         past.add(e);
+        future = new ArrayList<>();
     }
 
     public Stream<Event> past() {
