@@ -41,14 +41,20 @@ public class ActionHandler {
 
     private void click() {
         findTarget().ifPresent(d -> {
+            Position position = this.state.getCurrentGrid().positionOf(d);
+
             if (d instanceof Cell) {
                 Cell cell = (Cell) d;
 
                 if (d instanceof Toolbar.ToolBarCell) {
                     throwEvent(new SelectColorEvent(cell.getColor()));
                 } else {
-                    throwEvent(new ColorChangeEvent(state.getSelectedColor(), this.state.getCurrentGrid().positionOf(cell)));
+                    throwEvent(new ColorChangeEvent(state.getSelectedColor(), position));
                 }
+            }
+
+            if(d instanceof Grid){
+                throwEvent(new ColorChangeEvent(state.getSelectedColor(), position));
             }
         });
     }
@@ -89,7 +95,7 @@ public class ActionHandler {
 
             history = fileStore.readHistory();
             history.past().forEach((e) -> e.apply(state));
-
+            state.setCurrentGrid(state.getRoot());
         } catch (IOException e) {
             e.printStackTrace();
         }

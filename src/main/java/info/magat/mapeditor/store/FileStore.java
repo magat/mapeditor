@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -38,7 +39,7 @@ public class FileStore {
         List<String> lines = Files.readAllLines(path);
 
         int currentEvent = store.readCurrentEvent(lines.remove(0));
-        List<Event> events = lines.stream().map(store::readEvent).collect(toList());
+        List<Event> events = lines.stream().map(store::readEvent).filter(Objects::nonNull).collect(toList());
 
         History history = new History(events.subList(0, currentEvent), events.subList(currentEvent, events.size()));
 

@@ -4,6 +4,7 @@ import info.magat.mapeditor.color.Color;
 import info.magat.mapeditor.drawable.Position;
 import info.magat.mapeditor.event.ColorChangeEvent;
 import info.magat.mapeditor.event.Event;
+import info.magat.mapeditor.event.SplitEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ public class Store {
 
     private static final String CURRENT_EVENT = "CURRENT";
     private static final String COLOR_CHANGE = "COLOR_CHANGE";
+    private static final String SPLIT = "SPLIT";
     private static final String EVENT_DATA_SEPARATOR = ":";
     private static final String POSITION_DATA_SEPARATOR = ",";
 
@@ -31,6 +33,11 @@ public class Store {
             return Stream.of(COLOR_CHANGE, writeColor(ccEvent.color), writePosition(ccEvent.position)).collect(Collectors.joining(EVENT_DATA_SEPARATOR));
         }
 
+        if (SplitEvent.class.isAssignableFrom(event.getClass())) {
+            SplitEvent sEvent = (SplitEvent) event;
+            return Stream.of(SPLIT, writePosition(sEvent.position)).collect(Collectors.joining(EVENT_DATA_SEPARATOR));
+        }
+
         return "";
     }
 
@@ -39,6 +46,10 @@ public class Store {
 
         if (elements[0].equals(COLOR_CHANGE)) {
             return new ColorChangeEvent(readColor(elements[1]), readPosition(elements[2]));
+        }
+
+        if (elements[0].equals(SPLIT)) {
+            return new SplitEvent(readPosition(elements[1]));
         }
 
         return null;

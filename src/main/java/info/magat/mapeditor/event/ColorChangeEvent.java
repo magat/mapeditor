@@ -23,14 +23,6 @@ public class ColorChangeEvent implements Event {
     }
 
     @Override
-    public String toString() {
-        return "ColorChangeEvent{" +
-                "color=" + color +
-                ", position=" + position +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

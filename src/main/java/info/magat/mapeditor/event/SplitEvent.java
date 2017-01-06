@@ -4,7 +4,7 @@ import info.magat.mapeditor.drawable.*;
 
 public class SplitEvent implements Event {
 
-    private Position position;
+    public final Position position;
 
     public SplitEvent(Position position) {
         this.position = position;
