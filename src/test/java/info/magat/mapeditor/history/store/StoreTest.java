@@ -14,11 +14,11 @@ class StoreTest {
 
     @Test
     public void colorSerialization(){
-        assertEquals(Color.RED, store.readColor("#ff0000"));
+        assertEquals(Color.INDIAN_RED, store.readColor("#ff0000"));
         assertEquals(Color.BLACK, store.readColor("#000000"));
         assertEquals(Color.WHITE, store.readColor("#ffffff"));
 
-        assertEquals("#ff0000", store.writeColor(Color.RED));
+        assertEquals("#ff0000", store.writeColor(Color.INDIAN_RED));
         assertEquals("#000000", store.writeColor(Color.BLACK));
         assertEquals("#ffffff", store.writeColor(Color.WHITE));
 
@@ -37,7 +37,7 @@ class StoreTest {
     @Test
     public void eventSerialization(){
         Event event = store.readEvent("COLOR_CHANGE:#ff0000:0,0");
-        assertEquals(new ColorChangeEvent(Color.RED, new Position(0,0)), event);
+        assertEquals(new ColorChangeEvent(Color.INDIAN_RED, new Position(0,0)), event);
         assertEquals("COLOR_CHANGE:#ff0000:0,0", store.writeEvent(event));
         assertEquals(event, store.readEvent(store.writeEvent(event)));
     }

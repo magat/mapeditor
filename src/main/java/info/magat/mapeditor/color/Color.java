@@ -4,10 +4,12 @@ import java.util.Objects;
 
 public class Color {
 
-    public static final Color BLACK = new Color(0, 0, 0);
-    public static final Color RED = new Color(255, 0, 0);
-    public static final Color SLATE_GREY = new Color(112, 128, 144);
     public static final Color WHITE = new Color(255, 255, 255);
+    public static final Color BLACK = new Color(0, 0, 0);
+    public static final Color NAVY_BLUE = new Color(0, 0, 128);
+    public static final Color INDIAN_RED = new Color(176, 23, 31);
+    public static final Color SLATE_GREY = new Color(112, 128, 144);
+    public static final Color FOREST_GREEN = new Color(34, 139, 34);
 
     public final int red;
     public final int green;

@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 public class Layout extends Drawable {
 
     private State state;
-    private Toolbar toolbar = new Toolbar();
 
     @Autowired
     public Layout(State state) {
@@ -28,11 +27,11 @@ public class Layout extends Drawable {
         float separator = (width - mapWidth) / 2;
 
         grid.draw(separator, y, mapWidth, mapWidth);
-        toolbar.draw(separator, y + mapWidth, mapWidth, mapWidth / grid.getSide());
+        state.getToolbar().draw(separator, y + mapWidth, mapWidth, mapWidth / grid.getSide());
     }
 
     @Override
     public Stream<Drawable> elements() {
-        return Stream.of(state.getCurrentGrid(), toolbar).flatMap(Drawable::elements);
+        return Stream.of(state.getCurrentGrid(), state.getToolbar()).flatMap(Drawable::elements);
     }
 }
